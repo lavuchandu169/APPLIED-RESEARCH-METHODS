@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule an Appointment</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+</head>
+<body>
+
+<section id="scheduling" class="scheduling">
+    <h2>Schedule an Appointment</h2>
+    <form id="schedule-form">
+        <div class="form-group">
+            <label for="patient-id">Patient ID:</label>
+            <input type="text" id="patient-id" name="patient_id" placeholder="Enter Patient ID" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="doctor">Doctor:</label>
+            <input type="text" id="doctor" name="doctor" placeholder="Assign Doctor" required>
+        </div>
+
+        <div class="form-group">
+            <label for="duration">Expected Duration (mins):</label>
+            <input type="number" id="duration" name="duration" placeholder="Enter Duration" min="1" required>
+        </div>
+
+        <button type="submit">Schedule Appointment</button>
+    </form>
+</section>
+
+</body>
+</html>
