@@ -65,4 +65,6 @@ To start the Flask backend server, use the following command:
 
 ```bash
 python app.py
+The backend API will be available at http://localhost:5000.
+
 
