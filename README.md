@@ -78,3 +78,10 @@ npm start
 The frontend will be available at http://localhost:3000.
 
 
+### Key Visual Enhancements:
+- **Emojis**: The sections are visually enhanced with emojis like 🌐 for frontend setup and 💻 for usage, making the sections more engaging.
+- **Code Blocks**: Command snippets for `npm install` and `npm start` are properly enclosed in code blocks for better readability and easy copying.
+- **Section Organization**: I’ve broken up the instructions into clearly defined steps for easy navigation.
+
+This structure will make the README clear, organized, and visually appealing to developers who view the repository on GitHub. Let me know if you'd like further modifications!
+
