@@ -88,4 +88,3 @@ Acknowledgments
 OpenAI for providing the AI-powered Virtual Assistant (ChatGPT).
 Flask for providing the lightweight backend framework.
 React for the powerful frontend library.
-This README file provides an overview of how to use and contribute to the Hospital Resource Allocation System project, including the installation process and API details. Let me know if you need any changes or additional sections in the README!
