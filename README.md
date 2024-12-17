@@ -67,4 +67,14 @@ To start the Flask backend server, use the following command:
 python app.py
 The backend API will be available at http://localhost:5000.
 
+## 🌐 Set Up Frontend
+
+### 1. Install Node.js Dependencies
+
+Navigate to the **frontend** folder and install the necessary dependencies:
+
+```bash
+cd frontend
+npm install
+
 
