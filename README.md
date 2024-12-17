@@ -38,3 +38,17 @@ Clone the repository to your local machine:
 ```bash
 git clone https://github.com/your-username/hospital-resource-allocation.git
 cd hospital-resource-allocation
+
+## 🖥️ Set Up Backend
+
+### 1. Install Python Dependencies
+
+Navigate to the backend folder and install the required dependencies:
+
+```bash
+cd backend
+python3 -m venv venv
+source venv/bin/activate  # For Mac/Linux
+venv\Scripts\activate  # For Windows
+pip install -r requirements.txt
+
