@@ -35,7 +35,6 @@ This project is a **Hospital Resource Allocation System** that helps optimize ho
 ### 1. Clone the Repository
 Clone the repository to your local machine:
 
-```bash
 git clone https://github.com/your-username/hospital-resource-allocation.git
 cd hospital-resource-allocation
 
@@ -45,7 +44,6 @@ cd hospital-resource-allocation
 
 Navigate to the backend folder and install the required dependencies:
 
-```bash
 cd backend
 python3 -m venv venv
 source venv/bin/activate  # For Mac/Linux
@@ -62,8 +60,6 @@ Make sure you have your **pre-trained machine learning models** (e.g., `bed_mode
 ### 3. Run the Backend Server
 
 To start the Flask backend server, use the following command:
-
-```bash
 python app.py
 The backend API will be available at http://localhost:5000.
 
@@ -72,9 +68,13 @@ The backend API will be available at http://localhost:5000.
 ### 1. Install Node.js Dependencies
 
 Navigate to the **frontend** folder and install the necessary dependencies:
-
-```bash
 cd frontend
 npm install
+
+ Run the Frontend Server
+Start the React development server:
+
+npm start
+The frontend will be available at http://localhost:3000.
 
 
