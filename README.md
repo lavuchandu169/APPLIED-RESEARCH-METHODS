@@ -52,3 +52,17 @@ source venv/bin/activate  # For Mac/Linux
 venv\Scripts\activate  # For Windows
 pip install -r requirements.txt
 
+
+### 2. Set Up the Models
+
+Make sure you have your **pre-trained machine learning models** (e.g., `bed_model.pkl`, `staff_model.pkl`, and `equipment_model.pkl`) in the `/models` directory. These models are essential for predicting resource allocation.
+
+---
+
+### 3. Run the Backend Server
+
+To start the Flask backend server, use the following command:
+
+```bash
+python app.py
+
