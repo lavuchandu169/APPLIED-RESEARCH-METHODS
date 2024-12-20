@@ -5,6 +5,7 @@ import joblib
 import os
 import openai  # Import OpenAI library
 
+
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)  # Allow all origins and credentials
 
