@@ -6,7 +6,7 @@ import joblib
 import os
 
 # Load data
-data_file = "data/hospital_data.csv"
+data_file = "hospital_data.csv"
 df = pd.read_csv(data_file)
 
 # Train and save separate models
