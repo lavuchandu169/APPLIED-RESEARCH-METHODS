@@ -24,7 +24,7 @@ const VA = () => {
       setChatHistory((prev) => [...prev, { role: "user", content: inputText }]);
 
       // Send the input to the backend
-      const response = await axios.post("http://localhost:5001/chat", {
+      const response = await axios.post("http://localhost:5001/chatbot", {
         message: inputText,
       });
 
