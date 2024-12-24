@@ -90,6 +90,33 @@ def predict_equipment_utilization():
         logger.error("Error in equipment utilization prediction: %s", e)
         return _corsify_actual_response(jsonify({"error": str(e)})), 500
 
+@app.route("/chatbot", methods=["POST", "OPTIONS"])
+def chatbot():
+    if request.method == "OPTIONS":
+        return _build_cors_preflight_response()
+
+    try:
+        data = request.get_json()
+        if not data or "message" not in data:
+            return jsonify({"error": "Invalid request format. 'message' is required."}), 400
+
+        user_message = data["message"]
+
+        # Example logic for responding to user queries
+        if "predict" in user_message.lower():
+            response = "Please provide patient load, staff available, and equipment in use for predictions."
+        elif "recommendation" in user_message.lower():
+            response = "I can help recommend optimal resource allocation based on predictions."
+        else:
+            response = "I'm here to assist you with hospital resource management."
+
+        return jsonify({"response": response})
+
+    except Exception as e:
+        logger.error(f"Error in chatbot interaction: {e}")
+        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
+
+
 @app.route("/predict/combined", methods=["POST", "OPTIONS"])
 def combined_recommendation():
     if request.method == "OPTIONS":
