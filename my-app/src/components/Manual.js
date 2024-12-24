@@ -1,7 +1,20 @@
 import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faUserCheck, faTools } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faUserCheck, faTools, faBed } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+// Register Chart.js components
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Manual = () => {
   const [patientsLoad, setPatientsLoad] = useState("");
@@ -10,7 +23,7 @@ const Manual = () => {
   const [errors, setErrors] = useState({});
   const [recommendations, setRecommendations] = useState(null);
   const [loading, setLoading] = useState(false);
-  const resultsRef = useRef(null); // Reference for the results section
+  const resultsRef = useRef(null);
 
   const validateInputs = () => {
     const validationErrors = {};
@@ -44,7 +57,7 @@ const Manual = () => {
     if (Object.keys(validationErrors).length === 0) {
       try {
         setLoading(true);
-        setRecommendations(null); // Clear previous recommendations
+        setRecommendations(null);
 
         // Make API call to backend
         const response = await axios.post("http://localhost:5001/predict/combined", {
@@ -53,9 +66,9 @@ const Manual = () => {
           equipment_in_use: parseFloat(equipmentsInUse),
         });
 
-        setRecommendations(response.data); // Store recommendations
+        setRecommendations(response.data);
 
-        // Scroll to results section after data is fetched
+        // Scroll to results section
         setTimeout(() => {
           resultsRef.current.scrollIntoView({ behavior: "smooth" });
         }, 200);
@@ -68,8 +81,64 @@ const Manual = () => {
     }
   };
 
+  // Chart data configuration
+  const chartData = recommendations
+    ? {
+        labels: ["Beds", "Staff", "Equipment"],
+        datasets: [
+          {
+            label: "Entered Values",
+            data: [parseFloat(patientsLoad), parseFloat(staffAvailable), parseFloat(equipmentsInUse)],
+            backgroundColor: "rgba(75, 192, 192, 0.6)",
+            borderColor: "rgba(75, 192, 192, 1)",
+            borderWidth: 1,
+          },
+          {
+            label: "Predicted Values",
+            data: [
+              recommendations.bed_allocation,
+              recommendations.staff_optimization,
+              recommendations.equipment_utilization,
+            ],
+            backgroundColor: "rgba(153, 102, 255, 0.6)",
+            borderColor: "rgba(153, 102, 255, 1)",
+            borderWidth: 1,
+          },
+        ],
+      }
+    : null;
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Entered vs Predicted Values",
+      },
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: "Categories",
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: "Values",
+        },
+        beginAtZero: true,
+      },
+    },
+  };
+
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6 text-center">Get Recommendations</h2>
       <form onSubmit={handleSubmit}>
         {/* Patients Load Input */}
@@ -146,31 +215,31 @@ const Manual = () => {
         </button>
       </form>
 
-      {/* Link to Results */}
-      {recommendations && (
-        <div className="text-center mt-4">
-          <a
-            href="#results-section"
-            className="text-blue-500 underline"
-            onClick={(e) => {
-              e.preventDefault();
-              resultsRef.current.scrollIntoView({ behavior: "smooth" });
-            }}
-          >
-            View Results
-          </a>
-        </div>
-      )}
-
       {/* Display Recommendations */}
       {recommendations && (
-        <div ref={resultsRef} id="results-section" className="mt-6 p-4 bg-gray-100 rounded-lg">
-          <h3 className="text-lg font-semibold mb-2">Recommendations:</h3>
-          <p>Beds: {recommendations.bed_allocation}</p>
-          <p>Staff: {recommendations.staff_optimization}</p>
-          <p>Equipment: {recommendations.equipment_utilization}</p>
-          <p>{recommendations.recommendation}</p>
-        </div>
+        <>
+          <div ref={resultsRef} id="results-section" className="mt-6 p-4 bg-gray-100 rounded-lg">
+            <h3 className="text-lg font-semibold mb-2">Recommendations:</h3>
+            <p>
+              <FontAwesomeIcon icon={faBed} className="mr-2" />
+              Beds: {recommendations.bed_allocation}
+            </p>
+            <p>
+              <FontAwesomeIcon icon={faUserCheck} className="mr-2" />
+              Staff: {recommendations.staff_optimization}
+            </p>
+            <p>
+              <FontAwesomeIcon icon={faTools} className="mr-2" />
+              Equipment: {recommendations.equipment_utilization}
+            </p>
+            <p>{recommendations.recommendation}</p>
+          </div>
+
+          {/* Bar Chart */}
+          <div className="mt-6" style={{ height: "400px" }}>
+            <Bar data={chartData} options={chartOptions} />
+          </div>
+        </>
       )}
     </div>
   );
