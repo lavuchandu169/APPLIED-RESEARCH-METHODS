@@ -11,12 +11,13 @@ const VA = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
-  // Predefined questions and their corresponding answers
+  // Predefined questions and answers
   const predefinedQA = [
     {
       question: "What are the visiting hours?",
       answer: "Visiting hours are from 9 AM to 8 PM daily.",
     },
+
     {
       question: "How can I schedule an appointment?",
       answer: "You can schedule an appointment by calling our reception at (123) 456-7890 or through our website's appointment portal.",
@@ -33,6 +34,48 @@ const VA = () => {
       question: "How do I access my medical records?",
       answer: "You can access your medical records through our patient portal online or by visiting the medical records department.",
     },
+    {
+      question: "What should I bring for my hospital stay?",
+      answer: "Please bring personal identification, insurance information, a list of current medications, and any personal items for comfort.",
+    },
+    {
+      question: "Are interpreters available for non-English speaking patients?",
+      answer: "Yes, interpreter services are available upon request to assist non-English speaking patients.",
+    },
+    {
+      question: "How can I provide feedback about my care?",
+      answer: "We value your feedback. You can provide it through our online survey or by contacting our patient relations department.",
+    },
+    {
+      question: "Is there parking available for visitors?",
+      answer: "Yes, we have a visitor parking lot located adjacent to the main entrance. Parking fees may apply.",
+    },
+    {
+      question: "What are the cafeteria hours?",
+      answer: "Our cafeteria is open from 7 AM to 7 PM, offering a variety of meal options for patients and visitors.",
+    },
+    {
+      question: "Can I have someone stay overnight with me?",
+      answer: "Overnight stays by family members are permitted in certain departments. Please check with the nursing staff for specific policies.",
+    },
+    {
+      question: "What items are prohibited during my hospital stay?",
+      answer: "Prohibited items include personal electrical appliances, weapons, and any substances not prescribed by your physician.",
+    },
+    {
+      question: "How do I request a copy of my billing statement?",
+      answer: "You can request a copy of your billing statement by contacting our billing department or through our patient portal.",
+    },
+    {
+      question: "Are there any support groups available?",
+      answer: "Yes, we offer various support groups for patients and families. Please visit our website or contact our social services department for more information.",
+    },
+    {
+      question: "What should I do if I have concerns about my care?",
+      answer: "If you have any concerns, please speak with your nurse or physician immediately, or contact our patient advocacy team.",
+    },
+  
+    // Add more predefined questions and answers as needed
   ];
 
   // Toggle dropdown visibility
@@ -96,6 +139,16 @@ const VA = () => {
             </ul>
           )}
         </div>
+
+        <button
+          onClick={() => {
+            // Implement send functionality here
+          }}
+          className="flex items-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        >
+          <FontAwesomeIcon icon={faPaperPlane} className="mr-2" />
+          Send
+        </button>
 
         <button
           onClick={handleClear}
