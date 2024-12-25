@@ -6,59 +6,72 @@ import {
   faQuestionCircle,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios"; // Import Axios for API calls
+import axios from "axios";
 
 const VA = () => {
   const [inputText, setInputText] = useState("");
-  const [chatHistory, setChatHistory] = useState([]); // To maintain chat history
-  const [loading, setLoading] = useState(false); // Loading state for API calls
+  const [chatHistory, setChatHistory] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
-  // Handle the Ask Question functionality
-  const handleAskQuestion = async () => {
-    if (inputText.trim() === "") return; // Do nothing if input is empty
+  // Predefined questions
+  const predefinedQuestions = [
+    "What are the visiting hours?",
+    "How can I schedule an appointment?",
+    "What services does the hospital offer?",
+    "What insurance plans are accepted?",
+    "How do I access my medical records?",
+  ];
+
+  // Toggle dropdown visibility
+  const toggleDropdown = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
+
+  // Handle selection of a predefined question
+  const handleQuestionSelect = (question) => {
+    setInputText(question);
+    setDropdownVisible(false);
+  };
+
+  // Handle sending the question to the backend
+  const handleSend = async () => {
+    if (inputText.trim() === "") return;
 
     try {
-      setLoading(true); // Set loading to true while processing
-
-      // Add user input to chat history
+      setLoading(true);
       setChatHistory((prev) => [...prev, { role: "user", content: inputText }]);
 
-      // Send the input to the backend
-      const response = await axios.post("http://localhost:5001/chatbot", {
-        message: inputText,
-      });
+      const response = await axios.post(
+        "http://localhost:5001/chatbot",
+        { message: inputText },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-      // Add assistant's reply to chat history
       setChatHistory((prev) => [
         ...prev,
         { role: "assistant", content: response.data.reply },
       ]);
 
-      setInputText(""); // Clear input text
+      setInputText("");
     } catch (error) {
       console.error("Error communicating with the assistant:", error);
       alert("Failed to communicate with the assistant. Please try again later.");
     } finally {
-      setLoading(false); // Set loading back to false
+      setLoading(false);
     }
-  };
-
-  // Send button functionality
-  const handleSend = () => {
-    handleAskQuestion();
-  };
-
-  // Speak functionality using browser's speech synthesis
-  const handleSpeak = () => {
-    if (inputText.trim() === "") return;
-    const utterance = new SpeechSynthesisUtterance(inputText);
-    window.speechSynthesis.speak(utterance);
   };
 
   // Clear the input and chat history
   const handleClear = () => {
     setInputText("");
     setChatHistory([]);
+  };
+
+  // Handle voice input (placeholder function)
+  const handleVoiceInput = () => {
+    // Implement voice input functionality here
+    console.log("Voice input feature is not yet implemented.");
   };
 
   return (
@@ -68,38 +81,55 @@ const VA = () => {
       {/* Input area */}
       <textarea
         className="w-full h-40 border rounded-lg p-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Type your question or message here..."
+        placeholder="Type your question or select from the options..."
         value={inputText}
         onChange={(e) => setInputText(e.target.value)}
-        disabled={loading} // Disable input while loading
+        disabled={loading}
       />
 
       {/* Buttons */}
       <div className="flex justify-between mt-4">
-        <button
-          onClick={handleAskQuestion}
-          className="flex items-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          disabled={loading} // Disable button while loading
-        >
-          <FontAwesomeIcon icon={faQuestionCircle} className="mr-2" />
-          {loading ? "Asking..." : "Ask Question"}
-        </button>
+        <div className="relative">
+          <button
+            onClick={toggleDropdown}
+            className="flex items-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            disabled={loading}
+          >
+            <FontAwesomeIcon icon={faQuestionCircle} className="mr-2" />
+            {loading ? "Loading..." : "Ask Question"}
+          </button>
+          {/* Dropdown menu */}
+          {dropdownVisible && (
+            <ul className="absolute left-0 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+              {predefinedQuestions.map((question, index) => (
+                <li
+                  key={index}
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => handleQuestionSelect(question)}
+                >
+                  {question}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
         <button
           onClick={handleSend}
           className="flex items-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          disabled={loading} // Disable button while loading
+          disabled={loading}
         >
           <FontAwesomeIcon icon={faPaperPlane} className="mr-2" />
           {loading ? "Sending..." : "Send"}
         </button>
 
         <button
-          onClick={handleSpeak}
+          onClick={handleVoiceInput}
           className="flex items-center bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+          disabled={loading}
         >
           <FontAwesomeIcon icon={faMicrophone} className="mr-2" />
-          Speak
+          Voice Input
         </button>
 
         <button
@@ -111,7 +141,7 @@ const VA = () => {
         </button>
       </div>
 
-      {/* Chat history display */}
+      {/* Chat history */}
       <div className="mt-6 p-4 bg-gray-100 rounded-lg max-h-60 overflow-y-auto">
         {chatHistory.map((entry, index) => (
           <div
