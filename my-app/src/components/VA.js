@@ -2,25 +2,37 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPaperPlane,
-  faMicrophone,
   faQuestionCircle,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
 
 const VA = () => {
   const [inputText, setInputText] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
-  // Predefined questions
-  const predefinedQuestions = [
-    "What are the visiting hours?",
-    "How can I schedule an appointment?",
-    "What services does the hospital offer?",
-    "What insurance plans are accepted?",
-    "How do I access my medical records?",
+  // Predefined questions and their corresponding answers
+  const predefinedQA = [
+    {
+      question: "What are the visiting hours?",
+      answer: "Visiting hours are from 9 AM to 8 PM daily.",
+    },
+    {
+      question: "How can I schedule an appointment?",
+      answer: "You can schedule an appointment by calling our reception at (123) 456-7890 or through our website's appointment portal.",
+    },
+    {
+      question: "What services does the hospital offer?",
+      answer: "Our hospital offers a wide range of services including emergency care, surgery, maternity, and outpatient services.",
+    },
+    {
+      question: "What insurance plans are accepted?",
+      answer: "We accept various insurance plans. Please contact our billing department for a comprehensive list.",
+    },
+    {
+      question: "How do I access my medical records?",
+      answer: "You can access your medical records through our patient portal online or by visiting the medical records department.",
+    },
   ];
 
   // Toggle dropdown visibility
@@ -29,49 +41,21 @@ const VA = () => {
   };
 
   // Handle selection of a predefined question
-  const handleQuestionSelect = (question) => {
-    setInputText(question);
+  const handleQuestionSelect = (qa) => {
+    setInputText(qa.question);
     setDropdownVisible(false);
-  };
-
-  // Handle sending the question to the backend
-  const handleSend = async () => {
-    if (inputText.trim() === "") return;
-
-    try {
-      setLoading(true);
-      setChatHistory((prev) => [...prev, { role: "user", content: inputText }]);
-
-      const response = await axios.post(
-        "http://localhost:5001/chatbot",
-        { message: inputText },
-        { headers: { "Content-Type": "application/json" } }
-      );
-
-      setChatHistory((prev) => [
-        ...prev,
-        { role: "assistant", content: response.data.reply },
-      ]);
-
-      setInputText("");
-    } catch (error) {
-      console.error("Error communicating with the assistant:", error);
-      alert("Failed to communicate with the assistant. Please try again later.");
-    } finally {
-      setLoading(false);
-    }
+    setChatHistory((prev) => [
+      ...prev,
+      { role: "user", content: qa.question },
+      { role: "assistant", content: qa.answer },
+    ]);
+    setInputText("");
   };
 
   // Clear the input and chat history
   const handleClear = () => {
     setInputText("");
     setChatHistory([]);
-  };
-
-  // Handle voice input (placeholder function)
-  const handleVoiceInput = () => {
-    // Implement voice input functionality here
-    console.log("Voice input feature is not yet implemented.");
   };
 
   return (
@@ -81,10 +65,10 @@ const VA = () => {
       {/* Input area */}
       <textarea
         className="w-full h-40 border rounded-lg p-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Type your question or select from the options..."
+        placeholder="Select a question from the options..."
         value={inputText}
         onChange={(e) => setInputText(e.target.value)}
-        disabled={loading}
+        disabled
       />
 
       {/* Buttons */}
@@ -93,44 +77,25 @@ const VA = () => {
           <button
             onClick={toggleDropdown}
             className="flex items-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            disabled={loading}
           >
             <FontAwesomeIcon icon={faQuestionCircle} className="mr-2" />
-            {loading ? "Loading..." : "Ask Question"}
+            Ask Question
           </button>
           {/* Dropdown menu */}
           {dropdownVisible && (
             <ul className="absolute left-0 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
-              {predefinedQuestions.map((question, index) => (
+              {predefinedQA.map((qa, index) => (
                 <li
                   key={index}
                   className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => handleQuestionSelect(question)}
+                  onClick={() => handleQuestionSelect(qa)}
                 >
-                  {question}
+                  {qa.question}
                 </li>
               ))}
             </ul>
           )}
         </div>
-
-        <button
-          onClick={handleSend}
-          className="flex items-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          disabled={loading}
-        >
-          <FontAwesomeIcon icon={faPaperPlane} className="mr-2" />
-          {loading ? "Sending..." : "Send"}
-        </button>
-
-        <button
-          onClick={handleVoiceInput}
-          className="flex items-center bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
-          disabled={loading}
-        >
-          <FontAwesomeIcon icon={faMicrophone} className="mr-2" />
-          Voice Input
-        </button>
 
         <button
           onClick={handleClear}
