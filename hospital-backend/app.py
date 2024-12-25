@@ -90,30 +90,37 @@ def predict_equipment_utilization():
         logger.error("Error in equipment utilization prediction: %s", e)
         return _corsify_actual_response(jsonify({"error": str(e)})), 500
 
-@app.route("/chatbot", methods=["POST", "OPTIONS"])
+@app.route("/chatbot", methods=["POST"])
 def chatbot():
-    if request.method == "OPTIONS":
-        return _build_cors_preflight_response()
-
     try:
         data = request.get_json()
         if not data or "message" not in data:
             return jsonify({"error": "Invalid request format. 'message' is required."}), 400
 
-        user_message = data["message"]
+        user_message = data["message"].lower()
 
-        # Example logic for responding to user queries
-        if "predict" in user_message.lower():
-            response = "Please provide patient load, staff available, and equipment in use for predictions."
-        elif "recommendation" in user_message.lower():
-            response = "I can help recommend optimal resource allocation based on predictions."
-        else:
-            response = "I'm here to assist you with hospital resource management."
+        # Predefined responses
+        responses = {
+            "predict": "Please provide patient load, staff available, and equipment in use for predictions.",
+            "recommendation": "I can help recommend optimal resource allocation based on predictions.",
+            "visiting hours": "Our visiting hours are from 9 AM to 5 PM, Monday through Friday.",
+            "schedule appointment": "To schedule an appointment, please call our reception at (123) 456-7890.",
+            "services offered": "We offer a range of services including general surgery, pediatrics, and cardiology.",
+            "insurance plans": "We accept various insurance plans. Please visit our website for the complete list.",
+            "medical records": "You can access your medical records through our patient portal online."
+        }
+
+        # Determine response
+        response = "I'm here to assist you with hospital resource management."
+        for key, value in responses.items():
+            if key in user_message:
+                response = value
+                break
 
         return jsonify({"response": response})
 
     except Exception as e:
-        logger.error(f"Error in chatbot interaction: {e}")
+        app.logger.error(f"Error in chatbot interaction: {e}")
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
 
 
