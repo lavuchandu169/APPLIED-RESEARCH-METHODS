@@ -7,7 +7,6 @@ This project is a **Hospital Resource Allocation System** that helps optimize ho
 ## 🚀 Features
 
 - **Manual Input**: Users can input hospital data (such as patient load, available staff, and equipment in use) to get predictions for optimal resource allocation.
-- **Voice Interaction**: Users can interact with the Virtual Assistant using voice commands for hands-free interaction.
 - **Real-time Recommendations**: Get real-time recommendations for bed allocation, staff optimization, and equipment utilization.
 - **AI-powered Virtual Assistant**: Powered by OpenAI’s ChatGPT, the assistant provides real-time responses and can speak back to users.
 
@@ -23,7 +22,7 @@ This project is a **Hospital Resource Allocation System** that helps optimize ho
 ### Backend
 - **Flask** for creating the API.
 - **Machine Learning models** (e.g., regression models) for predicting resource allocation.
-- **OpenAI API** (optional) for integrating AI-driven conversations in the Virtual Assistant.
+- **OpenAI API** for integrating AI-driven conversations in the Virtual Assistant.
 
 ### Additional Tools
 - **CORS** to handle cross-origin requests between the frontend and backend.
